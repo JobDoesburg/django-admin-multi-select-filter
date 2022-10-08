@@ -1,0 +1,39 @@
+[project]
+name = "django-admin-multi-select-filter"
+version = "1.0.0-alpha.1"
+description = "Django admin filter for multiple select"
+readme = "README.md"
+authors = [{ name = "Job Doesburg", email = "job.doesburg@gmail.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Framework :: Django",
+    "Framework :: Django :: 3.0",
+    "Framework :: Django :: 3.1",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "django>=3",
+]
+requires-python = ">=3"
+
+[project.urls]
+homepage = "https://github.com/JobDoesburg/django-admin-multi-select-filter"
+repository = "https://github.com/JobDoesburg/django-admin-multi-select-filter"
+documentation = "https://github.com/JobDoesburg/django-admin-multi-select-filter"
+
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.html"]
