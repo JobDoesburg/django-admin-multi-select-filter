@@ -7,16 +7,7 @@ Django admin multi-select filter is a Django app that allows you to add a multi-
     ```bash
     pip install django-admin-multi-select-filter
     ```
-2. Add `django_admin_multi_select_filter` to your `INSTALLED_APPS`:
-    ```python
-    INSTALLED_APPS = [
-        ...
-        'django_admin_multi_select_filter',
-        ...
-    ]
-    ```
-
-3. Use the `MultiSelectFilter` in your admin classes:
+2. Use the `MultiSelectFilter` in your admin classes (you do **not** need to add the app to `INSTALLED_APPS`):
     ```python
     from django.contrib import admin
     from django_admin_multi_select_filter.filters import MultiSelectFieldListFilter
