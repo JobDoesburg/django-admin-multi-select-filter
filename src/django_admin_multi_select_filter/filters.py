@@ -20,12 +20,13 @@ class MultiSelectFieldListFilter(admin.FieldListFilter):
         # Obey parent ModelAdmin queryset when deciding which options to show
         if model == parent_model:
             queryset = model_admin.get_queryset(request)
+            self.lookup_choices = (
+                queryset.distinct().order_by(field.name).values_list(field.name, flat=True)
+            )
         else:
             queryset = parent_model._default_manager.all()
-        self.lookup_choices = (
-            queryset.distinct().order_by(field.name).values_list(field.name, flat=True)
-        )
-
+            self.lookup_choices = queryset.distinct()
+            
     def expected_parameters(self):
         return [self.lookup_kwarg, self.lookup_kwarg_isnull]
 
