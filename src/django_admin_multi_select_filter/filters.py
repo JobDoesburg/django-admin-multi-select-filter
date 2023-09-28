@@ -25,6 +25,11 @@ class MultiSelectFieldListFilter(admin.FieldListFilter):
         self.lookup_choices = (
             queryset.distinct().order_by(field.name).values_list(field.name, flat=True)
         )
+        self.field_verboses = {}
+        if self.field.choices:
+            self.field_verboses = {field_value: field_verbose for
+                                   field_value, field_verbose in
+                                   self.field.choices}
 
     def expected_parameters(self):
         return [self.lookup_kwarg, self.lookup_kwarg_isnull]
@@ -56,7 +61,7 @@ class MultiSelectFieldListFilter(admin.FieldListFilter):
                         {self.lookup_kwarg: ",".join(values)},
                         [self.lookup_kwarg_isnull],
                     ),
-                    "display": val,
+                    "display": self.field_verboses.get(val, val),
                 }
             else:
                 yield {
@@ -64,7 +69,7 @@ class MultiSelectFieldListFilter(admin.FieldListFilter):
                     "query_string": changelist.get_query_string(
                         remove=[self.lookup_kwarg]
                     ),
-                    "display": val,
+                    "display": self.field_verboses.get(val, val),
                 }
 
         if include_none:
