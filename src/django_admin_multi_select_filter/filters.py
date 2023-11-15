@@ -133,7 +133,7 @@ class MultiSelectRelatedFieldListFilter(admin.RelatedFieldListFilter):
             }
 
 
-class ExclusiveMultiSelectFilterMixin:
+class ExclusiveMultiSelectRelatedFieldListFilter(MultiSelectRelatedFieldListFilter):
     def queryset(self, request, queryset):
         try:
             if self.lookup_val_isnull:
@@ -155,17 +155,3 @@ class ExclusiveMultiSelectFilterMixin:
 
         except (ValueError, ValidationError) as e:
             raise IncorrectLookupParameters(e)
-
-
-class ExclusiveMultiSelectFieldListFilter(
-    ExclusiveMultiSelectFilterMixin,
-    MultiSelectFieldListFilter,
-):
-    pass
-
-
-class ExclusiveMultiSelectRelatedFieldListFilter(
-    ExclusiveMultiSelectFilterMixin,
-    MultiSelectRelatedFieldListFilter,
-):
-    pass
