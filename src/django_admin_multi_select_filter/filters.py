@@ -1,5 +1,8 @@
 from django.contrib import admin
+from django.contrib.admin.options import IncorrectLookupParameters
 from django.contrib.admin.utils import reverse_field_path
+from django.core.exceptions import ValidationError
+from django.db.models import Count, Q
 from django.utils.translation import gettext_lazy as _
 
 
@@ -128,3 +131,41 @@ class MultiSelectRelatedFieldListFilter(admin.RelatedFieldListFilter):
                 ),
                 "display": empty_title,
             }
+
+
+class ExclusiveMultiSelectFilterMixin:
+    def queryset(self, request, queryset):
+        try:
+            if self.lookup_val_isnull:
+                return queryset.filter(**{self.lookup_kwarg_isnull: True})
+
+            choices = self.lookup_val
+            choice_len = len(choices)
+            if choice_len == 0:
+                return queryset
+
+            queryset = queryset.alias(
+                nmatch=Count(
+                    self.field_path,
+                    filter=Q(**{f'{self.lookup_kwarg}': choices}),
+                    distinct=True
+                )
+            ).filter(nmatch=choice_len)
+            return queryset
+
+        except (ValueError, ValidationError) as e:
+            raise IncorrectLookupParameters(e)
+
+
+class ExclusiveMultiSelectFieldListFilter(
+    ExclusiveMultiSelectFilterMixin,
+    MultiSelectFieldListFilter,
+):
+    pass
+
+
+class ExclusiveMultiSelectRelatedFieldListFilter(
+    ExclusiveMultiSelectFilterMixin,
+    MultiSelectRelatedFieldListFilter,
+):
+    pass
